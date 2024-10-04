@@ -1,2 +1,2 @@
 # abcall-customer-api
-This is the microservice artifact make with python 🐍 with flask 🌶️. This artifact represents the service to manage the abcall customers 👷  .
+This is the microservice artifact make with python 🐍 with flask 🌶️. This artifact represents the service to manage the abcall customers 👷.
