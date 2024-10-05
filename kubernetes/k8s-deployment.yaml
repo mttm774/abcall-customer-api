@@ -1,0 +1,60 @@
+###################################
+# abcall-customer-api
+###################################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: abcall-customer-api
+  labels:
+    app: abcall-customer-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: abcall-customer-api
+  template:
+    metadata:
+      labels:
+        app: abcall-customer-api
+    spec:
+      containers:
+        - name: abcall-customer-api
+          image: abcall.azurecr.io/abcall-customer-api:1.0.0
+          env:
+            - name: "FLASK_APP"
+              valueFrom:
+                configMapKeyRef:
+                  name: customer-configmap
+                  key: FLASK_APP
+            - name: "FLASK_ENV"
+              valueFrom:
+                configMapKeyRef:
+                  name: customer-configmap
+                  key: FLASK_ENV
+            - name: "APP_NAME"
+              valueFrom:
+                configMapKeyRef:
+                  name: customer-configmap
+                  key: APP_NAME
+            - name: "DATABASE_URI"
+              valueFrom:
+                secretKeyRef:
+                  name: customer-secrets
+                  key: DATABASE_URI
+          ports:
+            - containerPort: 3005
+          imagePullPolicy: Always
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: abcall-customer-api-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: abcall-customer-api
+  ports:
+    - protocol: TCP
+      port: 3003
+      targetPort: 3003

@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  api-customer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: abcall-customer-api
+    restart: always
+    volumes:
+      - ".:/app"
+    ports:
+      - "3003:3003"
+    env_file:
+      - .env
+    tty: true
