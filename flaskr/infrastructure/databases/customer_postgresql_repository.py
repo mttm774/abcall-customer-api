@@ -4,8 +4,8 @@ from typing import List, Optional
 from uuid import UUID
 from ...domain.models import Customer
 from ...domain.interfaces import CustomerRepository
-from ...infrastructure.databases.customer_model_sqlalchemy import Base, CustomerModelSqlAlchemy
-from ...infrastructure.databases.plan_model_sqlalchemy import PlanModelSqlAlchemy
+from ...infrastructure.databases.model_sqlalchemy import Base, CustomerModelSqlAlchemy,PlanModelSqlAlchemy
+
 
 class CustomerPostgresqlRepository(CustomerRepository):
     def __init__(self, connection_string: str):
@@ -24,3 +24,21 @@ class CustomerPostgresqlRepository(CustomerRepository):
             return float(result[0])
         finally:
             session.close()
+
+
+    def list(self) -> List[Customer]:
+        session = self.Session()
+        try:
+            customer_models = session.query(CustomerModelSqlAlchemy).all()
+            return [self._from_model(customer_model) for customer_model in customer_models]
+        finally:
+            session.close()
+
+
+    def _from_model(self, model: CustomerModelSqlAlchemy) -> Customer:
+        return Customer(
+            id=model.id,
+            name=model.name,
+            plan_id=model.plan_id,
+            date_suscription=model.date_suscription
+        )

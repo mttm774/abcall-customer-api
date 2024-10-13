@@ -4,7 +4,7 @@ from typing import List, Optional
 from uuid import UUID
 from ...domain.models import Plan
 from ...domain.interfaces import PlanRepository
-from ...infrastructure.databases.plan_model_sqlalchemy import Base, PlanModelSqlAlchemy
+from ...infrastructure.databases.model_sqlalchemy import Base, PlanModelSqlAlchemy
 
 class PlanPostgresqlRepository(PlanRepository):
     def __init__(self, connection_string: str):

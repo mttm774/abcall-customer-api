@@ -25,5 +25,16 @@ class CustomerService:
         """
         customer_plan_rate = self.customer_repository.get_customer_plan(customer_id)
         return customer_plan_rate
+    
+    def list_customers(self):
+        """
+        This method query all customers
+        Args: 
+            none
+        Returns:
+            customers: (list)
+        """
+        list_customers=self.customer_repository.list()
+        return list_customers
 
     

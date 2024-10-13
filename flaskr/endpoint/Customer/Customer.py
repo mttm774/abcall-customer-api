@@ -24,6 +24,8 @@ class Customer(Resource):
     def get(self, action=None):
         if action == 'getRateByCustomer':
             return self.get_rate_by_customer()
+        elif action=='getCustomerList':
+            return self.get_customer_list()
         else:
             return {"message": "Action not found"}, 404
         
@@ -42,3 +44,17 @@ class Customer(Resource):
         except Exception as ex:
             log.error(f'Some error occurred trying to get the data from {customer_id}: {ex}')
             return {'message': 'Something was wrong trying to get rate by customer data'}, HTTPStatus.INTERNAL_SERVER_ERROR
+        
+    
+    def get_customer_list(self):
+        try:
+
+            log.info(f'Receive request to get customer list')
+            customer_list = self.service.list_customers()
+            list_c = [customer.to_dict() for customer in customer_list]
+            
+            return list_c, HTTPStatus.OK
+        except Exception as ex:
+            log.error(f'Some error occurred trying to get customer list: {ex}')
+            return {'message': 'Something was wrong trying to get customer list'}, HTTPStatus.INTERNAL_SERVER_ERROR
+        
