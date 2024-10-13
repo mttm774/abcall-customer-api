@@ -5,6 +5,7 @@ from uuid import UUID
 from ...domain.models import Customer
 from ...domain.interfaces import CustomerRepository
 from ...infrastructure.databases.customer_model_sqlalchemy import Base, CustomerModelSqlAlchemy
+from ...infrastructure.databases.plan_model_sqlalchemy import PlanModelSqlAlchemy
 
 class CustomerPostgresqlRepository(CustomerRepository):
     def __init__(self, connection_string: str):
@@ -14,3 +15,12 @@ class CustomerPostgresqlRepository(CustomerRepository):
 
     def _create_tables(self):
         Base.metadata.create_all(self.engine)
+
+
+    def get_customer_plan(self,customer_id):
+        session = self.Session()
+        try:
+            result= session.query(PlanModelSqlAlchemy.basic_monthly_rate).join(CustomerModelSqlAlchemy, CustomerModelSqlAlchemy.plan_id == PlanModelSqlAlchemy.id).filter(CustomerModelSqlAlchemy.id == customer_id).first()
+            return float(result[0])
+        finally:
+            session.close()
