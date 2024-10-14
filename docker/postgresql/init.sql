@@ -8,3 +8,41 @@ BEGIN
    END IF;
 END
 $do$;
+
+
+CREATE TABLE IF NOT EXISTS channel(
+   id UUID PRIMARY KEY,
+   name VARCHAR(20)
+);
+
+CREATE TABLE IF NOT EXISTS plan(
+   id UUID PRIMARY KEY,
+   name VARCHAR(20),
+   basic_monthly_rate NUMERIC(10, 2),
+   issue_fee NUMERIC(10, 2)
+);
+
+CREATE TABLE IF NOT EXISTS customer (
+    id UUID PRIMARY KEY,
+    name VARCHAR(50),
+    plan_id UUID,
+    date_suscription TIMESTAMP WITH TIME ZONE,
+    CONSTRAINT fk_plan
+        FOREIGN KEY (plan_id) 
+        REFERENCES plan (id)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS channel_plan (
+    id UUID PRIMARY KEY,
+    channel_id UUID,
+    plan_id UUID,
+    CONSTRAINT fk_plan
+        FOREIGN KEY (plan_id) 
+        REFERENCES plan (id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_channel
+      FOREIGN KEY (channel_id) 
+      REFERENCES channel (id)
+      ON DELETE CASCADE
+);

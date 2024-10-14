@@ -1,2 +1,3 @@
-from .customer_model_sqlalchemy import *
-from .customer_postresql_repository import *
+from .model_sqlalchemy import *
+from .plan_postgresql_repository import *
+from .customer_postgresql_repository import *
