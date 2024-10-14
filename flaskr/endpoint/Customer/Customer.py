@@ -50,6 +50,8 @@ class Customer(Resource):
         try:
 
             log.info(f'Receive request to get customer list')
+
+            
             customer_list = self.service.list_customers()
             list_c = [customer.to_dict() for customer in customer_list]
             
