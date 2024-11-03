@@ -3,6 +3,7 @@ from unittest.mock import patch, MagicMock
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from uuid import uuid4
+from unittest.mock import ANY
 from flaskr.infrastructure.databases.customer_postgresql_repository import CustomerPostgresqlRepository
 from flaskr.domain.models.customer import Customer
 from flaskr.infrastructure.databases.model_sqlalchemy import CustomerModelSqlAlchemy, PlanModelSqlAlchemy
@@ -23,8 +24,32 @@ class TestCustomerPostgresqlRepository(unittest.TestCase):
         self.repo = CustomerPostgresqlRepository('mock_connection_string')
         self.repo.Session = self.mock_session
 
+    def test_get_customer_plan(self):
+        customer_id = uuid4()
+        expected_rate = 99.99
+        mock_plan = (expected_rate,)
+        self.mock_session_instance.query.return_value.join.return_value.filter.return_value.first.return_value = mock_plan
+
+        result = self.repo.get_customer_plan(customer_id)
+
+        self.assertEqual(result, expected_rate)
+        self.mock_session_instance.query.assert_called_once_with(PlanModelSqlAlchemy.basic_monthly_rate)
+        self.mock_session_instance.query().join.assert_called_once_with(CustomerModelSqlAlchemy, ANY)
+     
+
+    def test_get_customer_issue_fee(self):
+        customer_id = uuid4()
+        expected_fee = 50.0
+        mock_fee = (expected_fee,)
+        self.mock_session_instance.query.return_value.join.return_value.filter.return_value.first.return_value = mock_fee
+
+        result = self.repo.get_customer_issue_fee(customer_id)
+
+        self.assertEqual(result, expected_fee)
+        self.mock_session_instance.query.assert_called_once_with(PlanModelSqlAlchemy.issue_fee)
+        self.mock_session_instance.query().join.assert_called_once_with(CustomerModelSqlAlchemy, ANY)
     
-    
+
     def test_list(self):
         mock_customer = CustomerModelSqlAlchemy(
             id=uuid4(),
