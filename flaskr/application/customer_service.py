@@ -50,7 +50,7 @@ class CustomerService:
         """
         issue_fee = self.customer_repository.get_customer_issue_fee(customer_id)
         return issue_fee
-    
+        
     def get_channel_by_plan(self, plan_id):
         """
         This method query base plan issue fee customer id
@@ -61,4 +61,27 @@ class CustomerService:
         """
         channels = self.channel_repository.get_channel_by_plan(plan_id)
         return channels
+    
+
+    def get_customer_by_id(self,customer_id):
+        """
+        This method query customer by id
+        Args: 
+            customer_id (UUID): customer id
+        Returns:
+            customer: (Customer)
+        """
+        return self.customer_repository.get_customer_by_id(customer_id)
+    
+    def get_plan_by_id(self,plan_id):
+        """
+        This method query plan by id
+        Args: 
+            plan_id (UUID): plan id
+        Returns:
+            plan: (Plan)
+        """
+        return self.plan_repository.get_plan_by_id(plan_id)
+
+
     
