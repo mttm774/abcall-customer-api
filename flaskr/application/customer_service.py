@@ -61,6 +61,8 @@ class CustomerService:
         """
         channels = self.channel_repository.get_channel_by_plan(plan_id)
         return channels
+    
+
     def get_customer_by_id(self,customer_id):
         """
         This method query customer by id
@@ -70,6 +72,16 @@ class CustomerService:
             customer: (Customer)
         """
         return self.customer_repository.get_customer_by_id(customer_id)
+    
+    def get_plan_by_id(self,plan_id):
+        """
+        This method query plan by id
+        Args: 
+            plan_id (UUID): plan id
+        Returns:
+            plan: (Plan)
+        """
+        return self.plan_repository.get_plan_by_id(plan_id)
 
 
     

@@ -56,6 +56,9 @@ class CustomerPostgresqlRepository(CustomerRepository):
         session = self.Session()
         try:
             result = session.query(CustomerModelSqlAlchemy).filter_by(id=customer_id).first()
-            return self._from_model(result)
+            if result:
+                return self._from_model(result)
+            else:
+                return None
         finally:
             session.close()

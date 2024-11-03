@@ -34,6 +34,8 @@ class Customer(Resource):
             return self.get_channel_by_plan()
         elif action=='getCustomerById':
             return self.get_customer_by_id()
+        elif action=='getPlanById':
+            return self.get_plan_by_id()
         else:
             return {"message": "Action not found"}, 404
         
@@ -102,11 +104,27 @@ class Customer(Resource):
             customer_id = request.args.get('customer_id')
             log.info(f'Receive request customer by customer_id {customer_id}')
             customer = self.service.get_customer_by_id(customer_id)
-            customer_s=customer.to_dict()
-            return {
-                'customer': customer_s
-            }, HTTPStatus.OK
+            if customer:
+                customer_s=customer.to_dict()
+                return  customer_s, HTTPStatus.OK
+            else:
+                return None, HTTPStatus.OK
         except Exception as ex:
             log.error(f'Some error occurred trying to get customer by customer_id: {ex}')
             return {'message': 'Something was wrong trying to get customer by customer_id'}, HTTPStatus.INTERNAL_SERVER_ERROR
+        
+
+    def get_plan_by_id(self):
+        try:
+            plan_id = request.args.get('plan_id')
+            log.info(f'Receive request plan by plan_id {plan_id}')
+            plan = self.service.get_plan_by_id(plan_id)
+            if plan:
+                plan_s=plan.to_dict()
+                return  plan_s, HTTPStatus.OK
+            else:
+                return None, HTTPStatus.OK
+        except Exception as ex:
+            log.error(f'Some error occurred trying to get plan by plan_id: {ex}')
+            return {'message': 'Something was wrong trying to get plan by plan_id'}, HTTPStatus.INTERNAL_SERVER_ERROR
         
