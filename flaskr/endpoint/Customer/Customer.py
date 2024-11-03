@@ -28,7 +28,8 @@ class Customer(Resource):
             return self.get_customer_list()
         elif action=='get_issue_fee_by_customer':
             return self.get_issue_fee_by_customer()
-        
+        elif action=='getCustomerById':
+            return self.get_customer_by_id()
         else:
             return {"message": "Action not found"}, 404
         
@@ -78,4 +79,18 @@ class Customer(Resource):
         except Exception as ex:
             log.error(f'Some error occurred trying to get issue fee from {customer_id}: {ex}')
             return {'message': 'Something was wrong trying to get issue fee by customer data'}, HTTPStatus.INTERNAL_SERVER_ERROR
+        
+
+    def get_customer_by_id(self):    
+        try:
+            customer_id = request.args.get('customer_id')
+            log.info(f'Receive request customer by customer_id {customer_id}')
+            customer = self.service.get_customer_by_id(customer_id)
+            customer_s=customer.to_dict()
+            return {
+                'customer': customer_s
+            }, HTTPStatus.OK
+        except Exception as ex:
+            log.error(f'Some error occurred trying to get customer by customer_id: {ex}')
+            return {'message': 'Something was wrong trying to get customer by customer_id'}, HTTPStatus.INTERNAL_SERVER_ERROR
         

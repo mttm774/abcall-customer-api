@@ -48,5 +48,16 @@ class CustomerService:
         """
         issue_fee = self.customer_repository.get_customer_issue_fee(customer_id)
         return issue_fee
+    
+    def get_customer_by_id(self,customer_id):
+        """
+        This method query customer by id
+        Args: 
+            customer_id (UUID): customer id
+        Returns:
+            customer: (Customer)
+        """
+        return self.customer_repository.get_customer_by_id(customer_id)
+
 
     
